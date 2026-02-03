@@ -12,12 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Map /photos/** to the local directory
-        registry.addResourceHandler("/photos/**")
-                .addResourceLocations("file:///C:/Users/pilli/OneDrive/Desktop/photos/");
-        
         // Serve uploaded files from the local project workspace
+        // This generally maps to the 'uploads' folder in the directory where the application is started
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:uploads/");
+                .addResourceLocations("file:./uploads/");
     }
 }

@@ -4,6 +4,7 @@ import axios from 'axios';
 import type { User } from '../App';
 import { Plus, Trash, MessageCircle, Mail, Phone, Heart } from 'lucide-react';
 import PropertyMap from '../components/PropertyMap';
+import { getImageUrl } from '../utils/imageUtils';
 
 interface SellerDashboardProps {
     user: User;
@@ -210,14 +211,7 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({ user }) => {
                                     <div className="bg-white rounded-4 shadow-sm overflow-hidden h-100 border">
                                         <div className="position-relative" style={{ height: '200px' }}>
                                             <img
-                                                src={
-                                                    p.images
-                                                        ? (p.images.startsWith('http')
-                                                            ? p.images
-                                                            : p.images.replace(/\\/g, '/').replace('C:/Users/pilli/OneDrive/Desktop/photos/', 'http://localhost:8081/photos/')
-                                                        )
-                                                        : "https://via.placeholder.com/400x200"
-                                                }
+                                                src={getImageUrl(p.images)}
                                                 alt="Property"
                                                 className="w-100 h-100 object-fit-cover"
                                                 onError={(e: any) => {
@@ -443,11 +437,7 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({ user }) => {
                                 <div className="mt-2">
                                     <small className="text-muted">Current Image:</small>
                                     <img
-                                        src={
-                                            newProperty.images.startsWith('http')
-                                                ? newProperty.images
-                                                : newProperty.images.replace(/\\/g, '/').replace('C:/Users/pilli/OneDrive/Desktop/photos/', 'http://localhost:8081/photos/')
-                                        }
+                                        src={getImageUrl(newProperty.images)}
                                         alt="Current"
                                         height="60"
                                         className="ms-2 rounded border"

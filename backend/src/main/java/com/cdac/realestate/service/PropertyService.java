@@ -115,15 +115,8 @@ public class PropertyService {
             String imageUrl = saveImage(image);
              property.setImages(imageUrl);
         } else if (propertyDetails.getImages() != null && !propertyDetails.getImages().isEmpty()) {
-             // If no new image, but images string is sent (maybe existing url), keep it.
-             // Usually frontend sends null for file if unchanged.
              property.setImages(propertyDetails.getImages());
         }
-
-        // Reset status to PENDING on edit? Or keep as is? Usually re-approval needed if
-        // critical fields change.
-        // For now, let's keep status but maybe Admin wants to re-verify.
-        // Let's set to PENDING to be safe.
         property.setStatus(Property.PropertyStatus.PENDING);
 
         return propertyRepository.save(property);
@@ -134,17 +127,21 @@ public class PropertyService {
     }
     
     private String saveImage(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException {
-        // Convert to Base64 string
-        // We get the bytes, encode them, and return the data URI string
-        byte[] bytes = file.getBytes();
-        String base64 = java.util.Base64.getEncoder().encodeToString(bytes);
-        
-        // Determine content type (default to jpeg if unknown, or extract from file)
-        String contentType = file.getContentType();
-        if (contentType == null || contentType.isEmpty()) {
-            contentType = "image/jpeg";
+        String uploadDir = "uploads";
+        java.io.File directory = new java.io.File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs();
         }
         
-        return "data:" + contentType + ";base64," + base64;
+        // Generate unique filename
+        String fileName = java.util.UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        java.nio.file.Path filePath = java.nio.file.Paths.get(uploadDir, fileName);
+        
+        // Save file locally
+        java.nio.file.Files.copy(file.getInputStream(), filePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        
+        // Return accessible URL instead of file path
+        // This solves the browser security issue by serving via HTTP
+        return "http://localhost:8081/uploads/" + fileName;
     }
 }
