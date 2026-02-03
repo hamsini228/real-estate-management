@@ -48,6 +48,9 @@ public class AuthDtos {
         // Seller optional
         private String companyName;
         private String address;
+        
+        @NotBlank(message = "OTP is required")
+        private String otp;
     }
 
     @Data

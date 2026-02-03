@@ -13,14 +13,35 @@ const Signup: React.FC = () => {
         role: 'BUYER',
         phone: '',
         companyName: '',
-        address: ''
+        address: '',
+        otp: ''
     });
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpLoading, setOtpLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSendOtp = async () => {
+        if (!formData.email) {
+            setError('Please enter your email first.');
+            return;
+        }
+        setOtpLoading(true);
+        try {
+            await axios.post('http://localhost:8081/api/auth/send-otp', { email: formData.email });
+            setSuccess('OTP sent to your email!');
+            setOtpSent(true);
+            setError('');
+        } catch (err: any) {
+            setError(err.response?.data || 'Failed to send OTP.');
+        } finally {
+            setOtpLoading(false);
+        }
     };
 
     const handleSignup = async (e: React.FormEvent) => {
@@ -134,9 +155,42 @@ const Signup: React.FC = () => {
                                             onChange={handleChange}
                                             required
                                             className="border-start-0"
+                                            disabled={otpSent}
                                         />
+                                        <Button
+                                            variant={otpSent ? "success" : "outline-secondary"}
+                                            onClick={handleSendOtp}
+                                            disabled={otpLoading || otpSent}
+                                        >
+                                            {otpLoading ? 'Sending...' : otpSent ? 'OTP Sent' : 'Send OTP'}
+                                        </Button>
                                     </div>
+                                    <Form.Text className="text-muted">
+                                        We will send you a One Time Password to verify your email.
+                                    </Form.Text>
                                 </Form.Group>
+
+                                {otpSent && (
+                                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Verify OTP</Form.Label>
+                                            <div className="input-group">
+                                                <span className="input-group-text bg-light border-end-0">
+                                                    <Lock size={18} className="text-success" />
+                                                </span>
+                                                <Form.Control
+                                                    type="text"
+                                                    name="otp"
+                                                    placeholder="Enter 6-digit OTP"
+                                                    onChange={handleChange}
+                                                    required
+                                                    className="border-start-0 border-success"
+                                                    maxLength={6}
+                                                />
+                                            </div>
+                                        </Form.Group>
+                                    </motion.div>
+                                )}
 
                                 {/* Password */}
                                 <Form.Group className="mb-3">

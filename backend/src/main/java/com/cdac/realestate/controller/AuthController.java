@@ -32,6 +32,31 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    com.cdac.realestate.service.EmailService emailService;
+
+    @Autowired
+    com.cdac.realestate.service.OtpService otpService;
+
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@RequestBody java.util.Map<String, String> request) {
+        String email = request.get("email");
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+        if (userRepository.existsByEmail(email)) {
+            return ResponseEntity.badRequest().body("Email is already registered!");
+        }
+
+        String otp = otpService.generateOtp(email);
+        try {
+            emailService.sendOtpEmail(email, otp);
+            return ResponseEntity.ok("OTP sent successfully to " + email);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to send OTP: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -58,6 +83,12 @@ public class AuthController {
                 return ResponseEntity
                         .badRequest()
                         .body("Error: Email is already in use!");
+            }
+
+            // Verify OTP
+            boolean isValidOtp = otpService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp());
+            if (!isValidOtp) {
+                return ResponseEntity.badRequest().body("Error: Invalid or expired OTP!");
             }
 
             // Create new user's account
