@@ -5,13 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+<<<<<<< HEAD
     "build": "vite build",
+=======
+    "build": "tsc && vite build",
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     "preview": "vite preview"
   },
   "devDependencies": {
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
+<<<<<<< HEAD
     "@vitejs/plugin-react": "^5.1.3",
+=======
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
   },

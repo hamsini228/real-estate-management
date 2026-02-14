@@ -23,6 +23,7 @@ public class AuthDtos {
     }
 
     @Data
+<<<<<<< HEAD
     public static class OtpRequest {
         @NotBlank(message = "Email is required")
         @Email(message = "Invalid email format")
@@ -34,6 +35,13 @@ public class AuthDtos {
         @NotBlank(message = "Name is required")
         @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
         @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name must contain only alphabets and spaces")
+=======
+    public static class SignupRequest {
+        @NotBlank(message = "Name is required")
+        @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
+        // Relaxed pattern to allow dots and hyphens
+        @Pattern(regexp = "^[a-zA-Z\\s\\.\\-]+$", message = "Name must contain only alphabets, spaces, dots, or hyphens")
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
         private String name;
 
         @NotBlank(message = "Email is required")
@@ -54,7 +62,11 @@ public class AuthDtos {
         // Seller optional
         private String companyName;
         private String address;
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
         @NotBlank(message = "OTP is required")
         private String otp;
     }

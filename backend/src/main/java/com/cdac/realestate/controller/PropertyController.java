@@ -36,6 +36,7 @@ public class PropertyController {
         return propertyService.getPropertyById(id);
     }
 
+<<<<<<< HEAD
     @Autowired
     com.cdac.realestate.service.FileStorageService fileStorageService;
 
@@ -63,11 +64,26 @@ public class PropertyController {
         emailService.sendPropertyAddedEmail(userDetails.getUsername(), userDetails.getName(), savedProperty.getTitle());
 
         return savedProperty;
+=======
+    // Seller: Add Property
+    @PostMapping(consumes = { org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PreAuthorize("hasAuthority('SELLER')")
+    public Property addProperty(
+            @RequestPart("property") String propertyJson,
+            @RequestPart(value = "image", required = false) org.springframework.web.multipart.MultipartFile image,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
+        
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        Property property = mapper.readValue(propertyJson, Property.class);
+        
+        return propertyService.addProperty(property, image, userDetails.getId());
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     }
 
     // Seller: Update Property
     @PutMapping(value = "/{id}", consumes = { org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE })
     @PreAuthorize("hasAuthority('SELLER')")
+<<<<<<< HEAD
     public Property updateProperty(@PathVariable Long id,
             @RequestPart("property") @Valid Property property,
             @RequestPart(value = "image", required = false) org.springframework.web.multipart.MultipartFile image,
@@ -80,6 +96,18 @@ public class PropertyController {
         }
 
         return propertyService.updateProperty(id, property, userDetails.getId());
+=======
+    public Property updateProperty(
+            @PathVariable Long id, 
+            @RequestPart("property") String propertyJson,
+            @RequestPart(value = "image", required = false) org.springframework.web.multipart.MultipartFile image,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
+            
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        Property property = mapper.readValue(propertyJson, Property.class);
+        
+        return propertyService.updateProperty(id, property, image, userDetails.getId());
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     }
 
     // Seller: My Listings
@@ -111,6 +139,7 @@ public class PropertyController {
     public Property updateStatus(@PathVariable Long id,
             @RequestParam Property.PropertyStatus status,
             @RequestParam(required = false) String reason) {
+<<<<<<< HEAD
         Property updatedProperty = propertyService.updateStatus(id, status, reason);
 
         // Send Status Email
@@ -124,5 +153,8 @@ public class PropertyController {
         }
 
         return updatedProperty;
+=======
+        return propertyService.updateStatus(id, status, reason);
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     }
 }

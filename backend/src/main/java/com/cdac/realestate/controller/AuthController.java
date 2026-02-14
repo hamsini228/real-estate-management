@@ -38,6 +38,28 @@ public class AuthController {
     @Autowired
     com.cdac.realestate.service.OtpService otpService;
 
+<<<<<<< HEAD
+=======
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@RequestBody java.util.Map<String, String> request) {
+        String email = request.get("email");
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+        if (userRepository.existsByEmail(email)) {
+            return ResponseEntity.badRequest().body("Email is already registered!");
+        }
+
+        String otp = otpService.generateOtp(email);
+        try {
+            emailService.sendOtpEmail(email, otp);
+            return ResponseEntity.ok("OTP sent successfully to " + email);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to send OTP: " + e.getMessage());
+        }
+    }
+
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -57,6 +79,7 @@ public class AuthController {
                 role));
     }
 
+<<<<<<< HEAD
     @PostMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@Valid @RequestBody OtpRequest otpRequest) {
         if (userRepository.existsByEmail(otpRequest.getEmail())) {
@@ -105,6 +128,40 @@ public class AuthController {
         emailService.sendWelcomeEmail(user.getEmail(), user.getName());
 
         return ResponseEntity.ok("User registered successfully!");
+=======
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        try {
+            if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Error: Email is already in use!");
+            }
+
+            // Verify OTP
+            boolean isValidOtp = otpService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp());
+            if (!isValidOtp) {
+                return ResponseEntity.badRequest().body("Error: Invalid or expired OTP!");
+            }
+
+            // Create new user's account
+            User user = new User();
+            user.setName(signUpRequest.getName());
+            user.setEmail(signUpRequest.getEmail());
+            user.setPassword(encoder.encode(signUpRequest.getPassword()));
+            user.setRole(User.Role.valueOf(signUpRequest.getRole().toUpperCase()));
+            user.setPhone(signUpRequest.getPhone());
+            user.setCompanyName(signUpRequest.getCompanyName());
+            user.setAddress(signUpRequest.getAddress());
+
+            userRepository.save(user);
+
+            return ResponseEntity.ok("User registered successfully!");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log error to console
+            return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
+        }
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     }
 
     @PostMapping("/google")
@@ -141,9 +198,12 @@ public class AuthController {
                 user.setPhone("0000000000");
 
                 userRepository.save(user);
+<<<<<<< HEAD
 
                 // Send Welcome Email for Google Signup
                 emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+=======
+>>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
             }
 
             // 4. Generate JWT
