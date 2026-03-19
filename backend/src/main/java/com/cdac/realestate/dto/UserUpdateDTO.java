@@ -15,7 +15,6 @@ public class UserUpdateDTO {
 
     private String companyName;
 
-<<<<<<< HEAD
     // Address Validations - Relaxed to allow numbers and common punctuation
     @Pattern(regexp = "^[a-zA-Z0-9\\s,.-]+$", message = "Address can contain alphabets, numbers, spaces, and , . -")
     private String address;
@@ -24,16 +23,6 @@ public class UserUpdateDTO {
     private String city;
 
     @Pattern(regexp = "^[a-zA-Z\\s.-]+$", message = "State must contain only alphabets, spaces, and . -")
-=======
-    // Address Validations as requested
-    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Address must contain only alphabets and spaces")
-    private String address;
-
-    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "City must contain only alphabets and spaces")
-    private String city;
-
-    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "State must contain only alphabets and spaces")
->>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     private String state;
 
     @Pattern(regexp = "^\\d{6}$", message = "Zip must be 6 digits")

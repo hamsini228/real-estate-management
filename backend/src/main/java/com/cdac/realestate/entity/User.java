@@ -21,12 +21,7 @@ public class User {
     @Column(nullable = false)
     @NotBlank(message = "Name is required")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
-<<<<<<< HEAD
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name must contain only alphabets and spaces")
-=======
-    // Relaxed pattern to allow dots and hyphens
-    @Pattern(regexp = "^[a-zA-Z\\s\\.\\-]+$", message = "Name must contain only alphabets, spaces, dots, or hyphens")
->>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
     private String name;
 
     @Column(nullable = false, unique = true)

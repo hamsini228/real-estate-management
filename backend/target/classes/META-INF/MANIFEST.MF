@@ -1,15 +1,6 @@
-<<<<<<< HEAD
 Manifest-Version: 1.0
 Build-Jdk-Spec: 21
 Implementation-Title: realestate
 Implementation-Version: 0.0.1-SNAPSHOT
 Created-By: Maven Integration for Eclipse
 
-=======
-Manifest-Version: 1.0
-Build-Jdk-Spec: 21
-Implementation-Title: realestate
-Implementation-Version: 0.0.1-SNAPSHOT
-Created-By: Maven Integration for Eclipse
-
->>>>>>> caa1517116c0cfdc5e3c3b03f54b8f09f8d6c083
